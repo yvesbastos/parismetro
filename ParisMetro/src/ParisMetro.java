@@ -58,11 +58,15 @@ public class ParisMetro {
 		
 		e7.adicionarVizinho(e5);
 		
+		e8.adicionarVizinho(e4);
 		e8.adicionarVizinho(e5);
 		e8.adicionarVizinho(e9);
+		e8.adicionarVizinho(e12);
 		
-		e9.adicionarVizinho(e8);
 		e9.adicionarVizinho(e2);
+		e9.adicionarVizinho(e3);
+		e9.adicionarVizinho(e8);
+		e9.adicionarVizinho(e11);
 		
 		e10.adicionarVizinho(e2);
 		
@@ -70,6 +74,7 @@ public class ParisMetro {
 		
 		e12.adicionarVizinho(e8);
 		
+		e13.adicionarVizinho(e3);
 		e13.adicionarVizinho(e4);
 		e13.adicionarVizinho(e14);
 		

@@ -71,31 +71,38 @@ public class AEstrela {
             closedList.add(current);
             
           //go through all the current Nodes neighbors and calculate if one should be our next step
+            int distanciaMelhorVizinho=1000;
+            
+            Vertice melhorVizinho=null;
             for(Vertice neighbor : current.retornarVizinhos()) {                    
-                    //if we have already searched this Node, don't bother and continue to the next one 
+                System.out.println("Vizinho atual: " + neighbor.numEstacao);    
+            	//if we have already searched this Node, don't bother and continue to the next one 
                     if (closedList.contains(neighbor)) {
                     	continue;
                     }
                     
                     int distanciaAtualAteDestino = (custoAteAqui + matrizDistancias[current.numEstacao-1][goal.numEstacao-1]);
                     int distanciaVizinhoAteDestino = (custoAteAqui + matrizDistancias[neighbor.numEstacao-1][goal.numEstacao-1]);
-
+                    
                     if(!openList.contains(neighbor)) {
-                            openList.add(neighbor);
-                    }
+                        openList.add(neighbor);
+                    }	
+                    
+                    
                     //se vizinho se aproxima do destino: se não;
-                    if(distanciaVizinhoAteDestino < distanciaAtualAteDestino) {
-                    	caminho.add(neighbor);
+                    if((distanciaVizinhoAteDestino < distanciaAtualAteDestino) && (distanciaVizinhoAteDestino < distanciaMelhorVizinho)) {
+                    	melhorVizinho = neighbor;
+                    	distanciaMelhorVizinho=distanciaVizinhoAteDestino;
+                        System.out.println("Vizinho vantagem: " + neighbor.numEstacao);
+                    	   	
                     } else {
+                    	System.out.println("Vizinho pior: " + neighbor.numEstacao);
                     	openList.remove(neighbor);
                     	closedList.add(neighbor);
                     }
-                    
-                    
-
             }
-            
-            if (current.numEstacao == goal.numEstacao) {
+            caminho.add(melhorVizinho);
+            /*if (current.numEstacao == goal.numEstacao) {
             	 System.out.println("num estacao current " + current.numEstacao + "num estacao goal " + goal.numEstacao);
          	 	if (!(caminho.contains(current))) {
          	 		caminho.add(current);
@@ -104,7 +111,7 @@ public class AEstrela {
                  openList.remove(current);
                  closedList.add(current);
                   return 1;
-            }
+            }*/
             System.out.println("current: " + current.numEstacao + ". goal: " + goal.numEstacao);
 
          }

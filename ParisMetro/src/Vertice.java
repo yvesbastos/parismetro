@@ -54,6 +54,10 @@ public class Vertice {
 	 * @return Retorna lista com vizinhos
 	 */
 	public ArrayList<Vertice> retornarVizinhos() {
+		/*System.out.println("Vizinhos: ");
+		for (int i=0; i<vizinhos.size(); i++) {
+			System.out.print(vizinhos.get(i).numEstacao + " ");
+		}*/
 		return vizinhos;
 	}
 	
