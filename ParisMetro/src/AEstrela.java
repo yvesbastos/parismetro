@@ -81,6 +81,7 @@ public class AEstrela {
                     	continue;
                     }
                     
+                    //int distanciaAtualAteVizinho = (custoAteAqui + matrizDistancias[current.numEstacao-1][neighbor.numEstacao-1]);
                     int distanciaAtualAteDestino = (custoAteAqui + matrizDistancias[current.numEstacao-1][goal.numEstacao-1]);
                     int distanciaVizinhoAteDestino = (custoAteAqui + matrizDistancias[neighbor.numEstacao-1][goal.numEstacao-1]);
                     
@@ -89,8 +90,7 @@ public class AEstrela {
                     }	
                     
                    
-                    if((distanciaVizinhoAteDestino <= distanciaAtualAteDestino) & (distanciaVizinhoAteDestino <= distanciaMelhorVizinho)) {
-                    	System.out.println("Check.");
+                    if((distanciaVizinhoAteDestino <= distanciaAtualAteDestino) & (distanciaVizinhoAteDestino < distanciaMelhorVizinho)) {
                     	melhorVizinho = neighbor;
                     	distanciaMelhorVizinho=distanciaVizinhoAteDestino;
                         System.out.println("Vizinho vantagem: " + neighbor.numEstacao);
@@ -102,6 +102,7 @@ public class AEstrela {
                     }
             }
             caminho.add(melhorVizinho);
+            System.out.println("\n\nVizinho escolhido: " + melhorVizinho.numEstacao);
             /*if (current.numEstacao == goal.numEstacao) {
             	 System.out.println("num estacao current " + current.numEstacao + "num estacao goal " + goal.numEstacao);
          	 	if (!(caminho.contains(current))) {
