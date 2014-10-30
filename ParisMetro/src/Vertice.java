@@ -12,6 +12,7 @@ public class Vertice {
 	int numEstacao = 0;
 	
 	/**
+	 * @author yvesbastos
 	 * Construtor.
 	 * @param numEstacao numero da estacao (facilita localizacao na matriz)
 	 * @param linha1 linha a qual a estacao pertence
@@ -24,6 +25,7 @@ public class Vertice {
 	}
 	
 	/**
+	 * @author yvesbastos
 	 * Construtor para estações onde duas linhas se intersectam 
 	 * @param numEstacao numero da estacao (facilita localizacao na matriz)
 	 * @param linha1 linha a qual a estacao pertence
@@ -37,12 +39,33 @@ public class Vertice {
 		this.numEstacao=numEstacao;
 	}
 	
+	/**
+	 * @author yvesbastos
+	 * Função utilizada para criar metrô (configurar estações vizinhas). 
+	 * @param vizinho
+	 */
 	public void adicionarVizinho(Vertice vizinho) {
 		this.vizinhos.add(vizinho);
 	}
 	
+	/**
+	 * @author yvesbastos
+	 *  
+	 * @return Retorna lista com vizinhos
+	 */
+	public ArrayList<Vertice> retornarVizinhos() {
+		return vizinhos;
+	}
+	
+	/**
+	 * @author yvesbastos
+	 * 
+	 * @return
+	 */
 	public int numeroVizinhos() {
 		return vizinhos.size();
 	}
+	
+	
 }
 

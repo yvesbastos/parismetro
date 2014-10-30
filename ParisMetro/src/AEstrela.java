@@ -29,6 +29,7 @@ public class AEstrela {
 		matrizDistancias = computarDistancias.definirDistancias(caminhoArquivo);
 		//computarDistancias.mostrarMatriz();
 		
+		caminho = new ArrayList<Vertice>();
 		closedList = new ArrayList<Vertice>();
         openList = new SortedNodeList();
 	}
@@ -43,19 +44,72 @@ public class AEstrela {
 		 closedList.clear();
          openList.clear();
          openList.add(start);
-         
+        int custoAteAqui=0;
+         caminho.add(start);
          //while we haven't reached the goal yet
          while(openList.size() != 0) {
 
              //get the first Node from non-searched Node list, sorted by lowest distance from our goal as guessed by our heuristic
              Vertice current = openList.getClosest(goal);
+             //int custoAteAqui = 0;
+             custoAteAqui = matrizDistancias[start.numEstacao-1][current.numEstacao-1];
+             
              
              // check if our current Node location is the goal Node. If it is, we are done.
-             if(current == goal) {
-                     return reconstructPath(current);
+             if(current.numEstacao == goal.numEstacao) {
+            	 	if (!(caminho.contains(current))) {
+            	 		caminho.add(current);
+            	 	}
+                    imprimirTrajeto();
+                    openList.remove(current);
+                    closedList.add(current);
+                     return 1;
              }
+             
+           //move current Node to the closed (already searched) list
+            openList.remove(current);
+            closedList.add(current);
+            
+          //go through all the current Nodes neighbors and calculate if one should be our next step
+            for(Vertice neighbor : current.retornarVizinhos()) {                    
+                    //if we have already searched this Node, don't bother and continue to the next one 
+                    if (closedList.contains(neighbor)) {
+                    	continue;
+                    }
+                    
+                    int distanciaAtualAteDestino = (custoAteAqui + matrizDistancias[current.numEstacao-1][goal.numEstacao-1]);
+                    int distanciaVizinhoAteDestino = (custoAteAqui + matrizDistancias[neighbor.numEstacao-1][goal.numEstacao-1]);
+
+                    if(!openList.contains(neighbor)) {
+                            openList.add(neighbor);
+                    }
+                    //se vizinho se aproxima do destino: se não;
+                    if(distanciaVizinhoAteDestino < distanciaAtualAteDestino) {
+                    	caminho.add(neighbor);
+                    } else {
+                    	openList.remove(neighbor);
+                    	closedList.add(neighbor);
+                    }
+                    
+                    
+
+            }
+            
+            if (current.numEstacao == goal.numEstacao) {
+            	 System.out.println("num estacao current " + current.numEstacao + "num estacao goal " + goal.numEstacao);
+         	 	if (!(caminho.contains(current))) {
+         	 		caminho.add(current);
+         	 	}
+                 imprimirTrajeto();
+                 openList.remove(current);
+                 closedList.add(current);
+                  return 1;
+            }
+            System.out.println("current: " + current.numEstacao + ". goal: " + goal.numEstacao);
+
          }
          
+         //imprimirTrajeto();
          return 0;
 	}
 	
@@ -80,8 +134,10 @@ public class AEstrela {
          this.shortestPath = path;
          return path;*/
 		 return -1;
- }
+	 }
 	
+	 
+	 
 	/**
 	 * 
 	 * @author yvesbastos
@@ -96,7 +152,8 @@ public class AEstrela {
         	int tIndex=-1;
         	
         	for (int i=0; i<list.size(); i++) {
-        		int tempDist = matrizDistancias[list.get(i).numEstacao][goal.numEstacao]; 
+        		//System.out.println("index: " + list.get(i).numEstacao);
+        		int tempDist = matrizDistancias[list.get(i).numEstacao-1][goal.numEstacao-1]; 
         		if (tempDist<distancia) {
         			distancia = tempDist;
         			tIndex=i;
