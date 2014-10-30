@@ -88,9 +88,9 @@ public class AEstrela {
                         openList.add(neighbor);
                     }	
                     
-                    
-                    //se vizinho se aproxima do destino: se não;
-                    if((distanciaVizinhoAteDestino < distanciaAtualAteDestino) && (distanciaVizinhoAteDestino < distanciaMelhorVizinho)) {
+                   
+                    if((distanciaVizinhoAteDestino <= distanciaAtualAteDestino) & (distanciaVizinhoAteDestino <= distanciaMelhorVizinho)) {
+                    	System.out.println("Check.");
                     	melhorVizinho = neighbor;
                     	distanciaMelhorVizinho=distanciaVizinhoAteDestino;
                         System.out.println("Vizinho vantagem: " + neighbor.numEstacao);
