@@ -9,7 +9,7 @@ public class Main {
 		AEstrela a = new AEstrela();
 		
 		a.definirDistancias("data/distancias.txt");
-		System.out.println("Test");
+		
 	}
 
 }
