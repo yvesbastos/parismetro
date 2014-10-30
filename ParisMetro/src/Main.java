@@ -9,7 +9,7 @@ public class Main {
 		AEstrela a = new AEstrela("data/distancias.txt");
 		ParisMetro paris = new ParisMetro();
 		
-		a.calcularTrajeto(paris.e1, paris.e5);
+		//a.calcularTrajeto(paris.e1, paris.e5);
 		
 	}
 
