@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class AEstrela {
@@ -10,9 +11,37 @@ public class AEstrela {
 	String line;
 	String[] splittedLine;
 	private int [] [] matrizDistancias;
+	private ArrayList<Vertice> caminho;
 	
-	public AEstrela() {
+	public AEstrela(String caminhoArquivo) {
+		caminho = new ArrayList<Vertice>();
+		
 		matrizDistancias = new int [14][14];
+		definirDistancias(caminhoArquivo);
+	}
+	
+	/*
+	 * vInicial: vértice inicial
+	 * vFinal: vértice final
+	 */
+	public void calcularTrajeto(Vertice vInicial, Vertice vFinal) {
+		//Algoritmo A*
+		
+		//proximoPasso();
+		
+		//imprimirTrajeto();
+	}
+	
+	public Vertice proximoPasso(int menorDistancia, Vertice vAtual, Vertice vFinal) {
+		//A* prox passo
+		return null; //provisorio
+	}
+	
+	public void imprimirTrajeto() {
+		System.out.println("Caminho: ");
+		for (int i=0; i<caminho.size(); i++) {
+			System.out.print(caminho.get(i).numEstacao + " ");
+		}
 	}
 	
 	public void definirDistancias(String caminhoArquivo) {
@@ -36,7 +65,7 @@ public class AEstrela {
 			e.printStackTrace();
 			
 		}
-		mostrarMatriz();
+		//mostrarMatriz();
 	}
 	
 	public void mostrarMatriz() {
