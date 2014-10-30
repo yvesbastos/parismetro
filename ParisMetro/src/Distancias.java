@@ -8,17 +8,17 @@ public class Distancias {
 	private BufferedReader fr;
 	private String line;
 	private String[] splittedLine;
-	private int [] [] matrizDistancias;
+	private float [] [] matrizDistancias;
 
 	public Distancias() {
-		matrizDistancias = new int [14][14];
+		matrizDistancias = new float [14][14];
 	}
 	
 	/**
 	 * Função que lê do arquivo de texto na pasta /data as distâncias entre as estações e coloca na matriz.
 	 * @param caminhoArquivo caminho até o .txt
 	 */
-	public int[][] definirDistancias(String caminhoArquivo) {
+	public float[][] definirDistancias(String caminhoArquivo) {
 		try {
 			fr = new BufferedReader(new FileReader(caminhoArquivo));
 			//preparado manualmente para arquivo de entrada com 14 linhas; não está ajustando automaticamente
@@ -29,7 +29,7 @@ public class Distancias {
 				splittedLine = line.split(" ");
 				
 				for (int i=0; i<splittedLine.length; i++) {
-					matrizDistancias[j][i] = Integer.parseInt(splittedLine[i]);
+					matrizDistancias[j][i] = Float.parseFloat(splittedLine[i])/30;
 				}
 				
 				j++;
@@ -39,9 +39,15 @@ public class Distancias {
 			e.printStackTrace();
 			
 		}
-		return matrizDistancias;
 		//mostrarMatriz();
+		return matrizDistancias;
+		
 	}
+	
+	/**
+	 * 
+	 */
+	
 	
 	/**
 	 * Função para exibir a matriz interpretada

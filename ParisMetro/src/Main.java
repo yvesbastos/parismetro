@@ -9,9 +9,10 @@ public class Main {
 		AEstrela a = new AEstrela("data/distancias.txt");
 		ParisMetro paris = new ParisMetro();
 		
-		a.aEstrela(paris.e1, paris.e12);
+		//System.out.println(a.existeBaldeacao(paris.e1, paris.e11));
 		
-		//a.calcularTrajeto(paris.e1, paris.e5);
+		a.aEstrela(paris.e14, paris.e10);
+		
 		
 	}
 

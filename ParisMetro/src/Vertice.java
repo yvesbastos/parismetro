@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class Vertice {
 	public ArrayList<Vertice> vizinhos;
-	boolean baldeacao=false;
-	private ArrayList<LinhaMetro> linhas;
+	//boolean baldeacao=false;
+	public ArrayList<LinhaMetro> linhas;
 	int numEstacao = 0;
 	
 	/**

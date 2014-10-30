@@ -12,8 +12,9 @@ import java.util.Collections;
  */
 public class AEstrela {
 	
-	private int [] [] matrizDistancias;
+	private float [] [] matrizDistancias;
 	private ArrayList<Vertice> caminho;
+	//private int tempoTrajeto;
 	
 	private ArrayList<Vertice> closedList;
     private SortedNodeList openList;
@@ -27,7 +28,6 @@ public class AEstrela {
 	public AEstrela(String caminhoArquivo) {		
 		Distancias computarDistancias = new Distancias();
 		matrizDistancias = computarDistancias.definirDistancias(caminhoArquivo);
-		//computarDistancias.mostrarMatriz();
 		
 		caminho = new ArrayList<Vertice>();
 		closedList = new ArrayList<Vertice>();
@@ -40,89 +40,89 @@ public class AEstrela {
 	 * @param vInicial
 	 * @param vFinal
 	 */
-	public int/*nao deve retornar int; provisorio*/ aEstrela(Vertice start, Vertice goal) {
+	public int aEstrela(Vertice estacaoInicial, Vertice estacaoDestino) {
 		 closedList.clear();
-         openList.clear();
-         openList.add(start);
-        int custoAteAqui=0;
-         caminho.add(start);
-         //while we haven't reached the goal yet
-         while(openList.size() != 0) {
+         openList.limpar();
+         openList.adicionar(estacaoInicial);
+         caminho.add(estacaoInicial);
+         
+         float custoAteAqui=0;
+            
+         //enquanto nao atingir destino
+         while(openList.tamanho() != 0) {
 
-             //get the first Node from non-searched Node list, sorted by lowest distance from our goal as guessed by our heuristic
-             Vertice current = openList.getClosest(goal);
-             //int custoAteAqui = 0;
-             custoAteAqui = matrizDistancias[start.numEstacao-1][current.numEstacao-1];
+             //pegar vertice mais próximo ao destino da fronteira (heuristica)
+             Vertice verticeAtual = openList.pegarMaisProximoAoDestino(estacaoDestino);
+             custoAteAqui = matrizDistancias[estacaoInicial.numEstacao-1][verticeAtual.numEstacao-1];
              
              
-             // check if our current Node location is the goal Node. If it is, we are done.
-             if(current.numEstacao == goal.numEstacao) {
-            	 	if (!(caminho.contains(current))) {
-            	 		caminho.add(current);
+             // o atual é o destino? Se sim, acabou. 
+             if(verticeAtual.numEstacao == estacaoDestino.numEstacao) {
+            	 	if (!(caminho.contains(verticeAtual))) {
+            	 		caminho.add(verticeAtual);
             	 	}
                     imprimirTrajeto();
-                    openList.remove(current);
-                    closedList.add(current);
+                    openList.remover(verticeAtual);
+                    closedList.add(verticeAtual);
                      return 1;
              }
              
-           //move current Node to the closed (already searched) list
-            openList.remove(current);
-            closedList.add(current);
+            openList.remover(verticeAtual);
+            closedList.add(verticeAtual);
             
-          //go through all the current Nodes neighbors and calculate if one should be our next step
-            int distanciaMelhorVizinho=1000;
+          //verificar entre os vizinhos qual será o escolhido
+            float distanciaMelhorVizinho=1000;
             
-            Vertice melhorVizinho=null;
-            for(Vertice neighbor : current.retornarVizinhos()) {                    
-                System.out.println("Vizinho atual: " + neighbor.numEstacao);    
+            Vertice melhorVizinho=estacaoDestino;
+            for(Vertice vizinho : verticeAtual.retornarVizinhos()) {                    
             	//if we have already searched this Node, don't bother and continue to the next one 
-                    if (closedList.contains(neighbor)) {
+                    if (closedList.contains(vizinho))
                     	continue;
-                    }
+                    float distanciaVizinhoAteDestino = ((custoAteAqui + matrizDistancias[verticeAtual.numEstacao-1][vizinho.numEstacao-1]) + custoBaldeacao(verticeAtual, vizinho) + matrizDistancias[vizinho.numEstacao-1][estacaoDestino.numEstacao-1]);
                     
-                    //int distanciaAtualAteVizinho = (custoAteAqui + matrizDistancias[current.numEstacao-1][neighbor.numEstacao-1]);
-                    int distanciaAtualAteDestino = (custoAteAqui + matrizDistancias[current.numEstacao-1][goal.numEstacao-1]);
-                    int distanciaVizinhoAteDestino = (custoAteAqui + matrizDistancias[neighbor.numEstacao-1][goal.numEstacao-1]);
-                    
-                    if(!openList.contains(neighbor)) {
-                        openList.add(neighbor);
+                    if(!openList.possui(vizinho)) {
+                        openList.adicionar(vizinho);
                     }	
                     
-                   
-                    if((distanciaVizinhoAteDestino <= distanciaAtualAteDestino) & (distanciaVizinhoAteDestino < distanciaMelhorVizinho)) {
-                    	melhorVizinho = neighbor;
+                    //(distanciaVizinhoAteDestino < distanciaAtualAteDestino) &&
+                    if( distanciaVizinhoAteDestino < distanciaMelhorVizinho) {
+                        System.out.println("Vizinho atual " + vizinho.numEstacao + ": " + distanciaVizinhoAteDestino + " < Melhor vizinho " + melhorVizinho.numEstacao + ": " + distanciaMelhorVizinho);
+                    	melhorVizinho = vizinho;
                     	distanciaMelhorVizinho=distanciaVizinhoAteDestino;
-                        System.out.println("Vizinho vantagem: " + neighbor.numEstacao);
+                        System.out.println("melhor vizinho escolhido: " + melhorVizinho.numEstacao);
                     	   	
                     } else {
-                    	System.out.println("Vizinho pior: " + neighbor.numEstacao);
-                    	openList.remove(neighbor);
-                    	closedList.add(neighbor);
+                    	System.out.println("entrou no else");
+                    	openList.remover(vizinho);
+                    	closedList.add(vizinho);
                     }
             }
             caminho.add(melhorVizinho);
-            System.out.println("\n\nVizinho escolhido: " + melhorVizinho.numEstacao);
-            /*if (current.numEstacao == goal.numEstacao) {
-            	 System.out.println("num estacao current " + current.numEstacao + "num estacao goal " + goal.numEstacao);
-         	 	if (!(caminho.contains(current))) {
-         	 		caminho.add(current);
-         	 	}
-                 imprimirTrajeto();
-                 openList.remove(current);
-                 closedList.add(current);
-                  return 1;
-            }*/
-            System.out.println("current: " + current.numEstacao + ". goal: " + goal.numEstacao);
+            System.out.println("melhor vizinho adicionado: " + melhorVizinho.numEstacao);
+            
 
          }
-         
-         //imprimirTrajeto();
          return 0;
 	}
 	
+	/**
+	 * Verifica se é necessário que o usuário faça uma baldeação entre as duas estações
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public float custoBaldeacao(Vertice v1, Vertice v2) {
+		for (int i=0; i<v1.linhas.size(); i++) {
+			if (v2.linhas.contains(v1.linhas.get(i))) {
+				//sem baldeacao
+				return 0;
+			}
+		}
+		return (float) 0.0667;// baldeacao;
+	}
 	
 	/**
+	 * @author yvesbastos
 	 * Função simplificada e provisória para mostrar o trajeto escolhido. 
 	 * 
 	 */
@@ -132,89 +132,60 @@ public class AEstrela {
 			System.out.print(caminho.get(i).numEstacao + " ");
 		}
 	}
-	
-	 private int/*Path*/ reconstructPath(Vertice node) {
-         /*Path path = new Path();
-         while(!(node.getPreviousNode() == null)) {
-                 path.prependWayPoint(node);
-                 node = node.getPreviousNode();
-         }
-         this.shortestPath = path;
-         return path;*/
-		 return -1;
-	 }
-	
 	 
 	 
 	/**
-	 * 
+	 * Classe para organizar fronteira
 	 * @author yvesbastos
 	 *
 	 */
 	private class SortedNodeList {
 
-        private ArrayList<Vertice> list = new ArrayList<Vertice>();
+        private ArrayList<Vertice> lista = new ArrayList<Vertice>();
 
-        public Vertice getClosest(Vertice goal) {
-        	int distancia=1000;
+        public Vertice pegarMaisProximoAoDestino(Vertice goal) {
+        	float distancia=1000;
         	int tIndex=-1;
         	
-        	for (int i=0; i<list.size(); i++) {
+        	for (int i=0; i<lista.size(); i++) {
         		//System.out.println("index: " + list.get(i).numEstacao);
-        		int tempDist = matrizDistancias[list.get(i).numEstacao-1][goal.numEstacao-1]; 
+        		float tempDist = matrizDistancias[lista.get(i).numEstacao-1][goal.numEstacao-1]; 
         		if (tempDist<distancia) {
         			distancia = tempDist;
         			tIndex=i;
         		}
         	}
-                return list.get(tIndex);
+                return lista.get(tIndex);
+        }
+        
+        public void limpar() {
+                lista.clear();
         }
 
-        public void clear() {
-                list.clear();
+        public void adicionar(Vertice node) {
+                lista.add(node);
         }
 
-        public void add(Vertice node) {
-                list.add(node);
+        public void remover(Vertice n) {
+                lista.remove(n);
         }
 
-        public void remove(Vertice n) {
-                list.remove(n);
+        public int tamanho() {
+                return lista.size();
         }
 
-        public int size() {
-                return list.size();
-        }
-
-        public boolean contains(Vertice n) {
-                return list.contains(n);
+        public boolean possui(Vertice n) {
+                return lista.contains(n);
         }
 }
 }
 
-/*private Vertice reconstruct_path(ArrayList<Vertice>came_from, Vertice current_node) {
-Vertice p;
-
-if (came_from.contains(current_node)) {
-	
-	p = reconstruct_path(came_from, came_from.get(came_from.indexOf(current_node)));
-	return (p + current_node);
-} else return current_node;
-}
-
-private int getLowestFScore(int[] f_score) {
-int menor=1000;
-int indice=0;
-
-for (int i=0; i<f_score.length; i++) {
-	if (f_score[i]<menor) {
-		menor=f_score[i];
-		indice=i;
+/*if (current.numEstacao == goal.numEstacao) {
+	if (!(caminho.contains(current))) {
+		caminho.add(current);
 	}
-}
-return indice;
-}
-
-private int heuristic_cost_estimate(Vertice start, Vertice goal) {
-return matrizDistancias[start.numEstacao][goal.numEstacao];
+ imprimirTrajeto();
+ openList.remove(current);
+ closedList.add(current);
+  return 1;
 }*/
