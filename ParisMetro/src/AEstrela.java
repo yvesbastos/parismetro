@@ -45,64 +45,59 @@ public class AEstrela {
          openList.limpar();
          openList.adicionar(estacaoInicial);
          caminho.add(estacaoInicial);
-         
-         float custoAteAqui=0;
-            
-         //enquanto nao atingir destino
-         while(openList.tamanho() != 0) {
 
-             //pegar vertice mais próximo ao destino da fronteira (heuristica)
-             Vertice verticeAtual = openList.pegarMaisProximoAoDestino(estacaoDestino);
-             custoAteAqui = matrizDistancias[estacaoInicial.numEstacao-1][verticeAtual.numEstacao-1];
-             
-             
-             // o atual é o destino? Se sim, acabou. 
-             if(verticeAtual.numEstacao == estacaoDestino.numEstacao) {
-            	 	if (!(caminho.contains(verticeAtual))) {
-            	 		caminho.add(verticeAtual);
-            	 	}
-                    imprimirTrajeto();
-                    openList.remover(verticeAtual);
-                    closedList.add(verticeAtual);
-                     return 1;
-             }
-             
-            openList.remover(verticeAtual);
-            closedList.add(verticeAtual);
-            
-          //verificar entre os vizinhos qual será o escolhido
-            float distanciaMelhorVizinho=1000;
-            
-            Vertice melhorVizinho=estacaoDestino;
-            for(Vertice vizinho : verticeAtual.retornarVizinhos()) {                    
-            	//if we have already searched this Node, don't bother and continue to the next one 
-                    if (closedList.contains(vizinho))
-                    	continue;
-                    float distanciaVizinhoAteDestino = ((custoAteAqui + matrizDistancias[verticeAtual.numEstacao-1][vizinho.numEstacao-1]) + custoBaldeacao(verticeAtual, vizinho) + matrizDistancias[vizinho.numEstacao-1][estacaoDestino.numEstacao-1]);
-                    
-                    if(!openList.possui(vizinho)) {
-                        openList.adicionar(vizinho);
-                    }	
-                    
-                    //(distanciaVizinhoAteDestino < distanciaAtualAteDestino) &&
-                    if( distanciaVizinhoAteDestino < distanciaMelhorVizinho) {
-                        System.out.println("Vizinho atual " + vizinho.numEstacao + ": " + distanciaVizinhoAteDestino + " < Melhor vizinho " + melhorVizinho.numEstacao + ": " + distanciaMelhorVizinho);
-                    	melhorVizinho = vizinho;
-                    	distanciaMelhorVizinho=distanciaVizinhoAteDestino;
-                        System.out.println("melhor vizinho escolhido: " + melhorVizinho.numEstacao);
-                    	   	
-                    } else {
-                    	System.out.println("entrou no else");
-                    	openList.remover(vizinho);
-                    	closedList.add(vizinho);
-                    }
-            }
-            caminho.add(melhorVizinho);
-            System.out.println("melhor vizinho adicionado: " + melhorVizinho.numEstacao);
-            
+		float custoAteAqui = 0;
+		// enquanto nao atingir destino
+		while (openList.tamanho() != 0) {
 
-         }
-         return 0;
+			// pegar vertice mais próximo ao destino da fronteira (heuristica)
+			Vertice verticeAtual = openList
+					.pegarMaisProximoAoDestino(estacaoDestino);
+			custoAteAqui = matrizDistancias[estacaoInicial.numEstacao - 1][verticeAtual.numEstacao - 1];
+
+			// o atual é o destino? Se sim, acabou.
+			if (verticeAtual.numEstacao == estacaoDestino.numEstacao) {
+				if (!(caminho.contains(verticeAtual))) {
+					caminho.add(verticeAtual);
+				}
+				imprimirTrajeto();
+				openList.remover(verticeAtual);
+				closedList.add(verticeAtual);
+				return 1;
+			}
+
+			openList.remover(verticeAtual);
+			closedList.add(verticeAtual);
+
+			// verificar entre os vizinhos qual será o escolhido
+			float distanciaMelhorVizinho = 1000;
+
+			Vertice melhorVizinho = estacaoDestino;
+			for (Vertice vizinho : verticeAtual.retornarVizinhos()) {
+				// if we have already searched this Node, don't bother and
+				// continue to the next one
+				if (closedList.contains(vizinho))
+					continue;
+				float distanciaVizinhoAteDestino = ((custoAteAqui + matrizDistancias[verticeAtual.numEstacao - 1][vizinho.numEstacao - 1])
+						+ custoBaldeacao(verticeAtual, vizinho) + matrizDistancias[vizinho.numEstacao - 1][estacaoDestino.numEstacao - 1]);
+
+				if (!openList.possui(vizinho)) {
+					openList.adicionar(vizinho);
+				}
+
+				// (distanciaVizinhoAteDestino < distanciaAtualAteDestino) &&
+				if (distanciaVizinhoAteDestino < distanciaMelhorVizinho) {
+					melhorVizinho = vizinho;
+					distanciaMelhorVizinho = distanciaVizinhoAteDestino;
+
+				} else {
+					openList.remover(vizinho);
+					closedList.add(vizinho);
+				}
+			}
+			caminho.add(melhorVizinho);
+		}
+		return 0;
 	}
 	
 	/**
@@ -148,7 +143,6 @@ public class AEstrela {
         	int tIndex=-1;
         	
         	for (int i=0; i<lista.size(); i++) {
-        		//System.out.println("index: " + list.get(i).numEstacao);
         		float tempDist = matrizDistancias[lista.get(i).numEstacao-1][goal.numEstacao-1]; 
         		if (tempDist<distancia) {
         			distancia = tempDist;
